@@ -217,7 +217,6 @@ public class MainActivity extends AppCompatActivity
             model.hash = MD5Utils.fileToMD5(f);
             model.length = f.length();
             model.duplicateCount = 1;
-            //            Log.v("insertFile", model.toString());
             _threadCount.decrementAndGet();
             FileDB.insertFile(model);
             _handler.post(new NotifyAdapterRunnable(model));
