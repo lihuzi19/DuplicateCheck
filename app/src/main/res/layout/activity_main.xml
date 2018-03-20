@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/act_main_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="开始搜索重复文件!"/>
+
+    <TextView
+        android:id="@+id/act_main_show"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/act_main_start"
+        android:padding="10dp"
+        android:text="查看重复文件!"/>
+
+    <TextView
+        android:id="@+id/act_main_show_big_files"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/act_main_show"
+        android:padding="10dp"
+        android:text="查看大文件!"/>
+
+    <TextView
+        android:id="@+id/act_main_searching"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/act_main_show_big_files"
+        android:padding="10dp"
+        android:text=""/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/act_main_searching_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/act_main_searching">
+    </android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>
