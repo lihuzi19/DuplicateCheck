@@ -22,12 +22,9 @@ public class LHZFileUtils
     public static void openFile(Activity activity, File file)
     {
         Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         i.addCategory(Intent.CATEGORY_DEFAULT);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        //        File dataFile = new File(DuplicateCheckApplication.getInstance().getFilesDir().getAbsolutePath() + "/test/" + file.getName());
-        //        File dataFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/" + file.getName());
-        //        copyFileUsingFileChannels(file, dataFile);
         Uri uri = getUriFromFile(file);
         i.setDataAndType(uri, getMimeType(file.getName()));
         activity.startActivity(i);
