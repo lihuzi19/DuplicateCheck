@@ -1,5 +1,6 @@
 package com.lihuzi.duplicatecheck;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -82,7 +83,12 @@ public class FileDetailsPathAdapter extends
         @Override
         public void onClick(final View v)
         {
-
+            String path = (String) v.getTag();
+            File f = new File(path);
+            if (f.exists())
+            {
+                LHZFileUtils.openFile(((Activity) v.getContext()), f);
+            }
         }
     };
     private View.OnLongClickListener longClickListener = new View.OnLongClickListener()
