@@ -1,4 +1,4 @@
-package com.lihuzi.duplicatecheck;
+package com.lihuzi.duplicatecheck.ui.activity;
 
 import android.Manifest;
 import android.content.Intent;
@@ -13,6 +13,15 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import com.lihuzi.duplicatecheck.FileBeanSearchingAdapter;
+import com.lihuzi.duplicatecheck.FileDB;
+import com.lihuzi.duplicatecheck.MD5Utils;
+import com.lihuzi.duplicatecheck.R;
+import com.lihuzi.duplicatecheck.SearchingRecyclerAdapter;
+import com.lihuzi.duplicatecheck.ShowActivity;
+import com.lihuzi.duplicatecheck.utils.getDiviceId;
+import com.lihuzi.duplicatecheck.model.FileBean;
 
 import java.io.File;
 import java.util.concurrent.ExecutorService;
@@ -32,6 +41,7 @@ public class MainActivity extends AppCompatActivity
     private TextView _searchingTv;
     private RecyclerView _searchingRecyclerView;
     private SearchingRecyclerAdapter _adapter;
+    private FileBeanSearchingAdapter adapter;
 
 
     @Override
@@ -50,7 +60,8 @@ public class MainActivity extends AppCompatActivity
         _searchingRecyclerView = findViewById(R.id.act_main_searching_recyclerview);
         _searchingRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         _adapter = new SearchingRecyclerAdapter();
-        _searchingRecyclerView.setAdapter(_adapter);
+        adapter = new FileBeanSearchingAdapter();
+        _searchingRecyclerView.setAdapter(adapter);
         findViewById(R.id.act_main_start).setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -211,21 +222,22 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void run()
         {
-            FileModel model = new FileModel();
-            model.name = f.getName();
-            model.path = f.getAbsolutePath();
-            model.hash = MD5Utils.fileToMD5(f);
-            model.length = f.length();
-            model.duplicateCount = 1;
+            //            FileModel model = new FileModel();
+            //            model.name = f.getName();
+            //            model.path = f.getAbsolutePath();
+            //            model.hash = MD5Utils.fileToMD5(f);
+            //            model.length = f.length();
+            //            model.duplicateCount = 1;
+            //            FileDB.insertFile(model);
+            FileBean fileBean = new FileBean();
+            fileBean.name = f.getName();
+            fileBean.localPath = f.getAbsolutePath();
+            fileBean.hash = MD5Utils.fileToMD5(f);
+            fileBean.length = f.length();
             _threadCount.decrementAndGet();
-            FileDB.insertFile(model);
-            _handler.post(new NotifyAdapterRunnable(model));
+            com.lihuzi.duplicatecheck.db.FileDB.insert(fileBean);
+            _handler.post(new NotifyAdapterRunnable(fileBean));
         }
-    }
-
-    private String getHashByName(File f)
-    {
-        return "hahaha";
     }
 
     private void initThread()
@@ -254,17 +266,17 @@ public class MainActivity extends AppCompatActivity
 
     class NotifyAdapterRunnable implements Runnable
     {
-        private FileModel model;
+        private FileBean fileBean;
 
-        public NotifyAdapterRunnable(FileModel f)
+        public NotifyAdapterRunnable(FileBean f)
         {
-            this.model = f;
+            this.fileBean = f;
         }
 
         @Override
         public void run()
         {
-            _adapter.add(model);
+            adapter.add(fileBean);
             _searchingRecyclerView.smoothScrollToPosition(0);
         }
     }

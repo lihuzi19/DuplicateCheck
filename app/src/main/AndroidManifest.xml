@@ -23,7 +23,7 @@
                 android:resource="@xml/file_path" />
         </provider>
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -34,7 +34,7 @@
         </activity>
         <activity android:name=".FileDetailsActivity">
         </activity>
-        <activity android:name=".BigFilesActivity">
+        <activity android:name=".ui.activity.BigFilesActivity">
         </activity>
     </application>
 

@@ -1,10 +1,12 @@
-package com.lihuzi.duplicatecheck;
+package com.lihuzi.duplicatecheck.utils;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.content.FileProvider;
+
+import com.lihuzi.duplicatecheck.DuplicateCheckApplication;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,7 +29,7 @@ public class LHZFileUtils
         i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         Uri uri = getUriFromFile(file);
         i.setDataAndType(uri, getMimeType(file.getName()));
-        activity.startActivity(i);
+         activity.startActivity(i);
     }
 
     public static void copyFileUsingFileChannels(File source, File dest)

@@ -1,5 +1,7 @@
 package com.lihuzi.duplicatecheck;
 
+import com.lihuzi.duplicatecheck.utils.FileLengthUtils;
+
 /**
  * Created by cocav on 2018/3/15.
  */

@@ -1,4 +1,4 @@
-package com.lihuzi.duplicatecheck;
+package com.lihuzi.duplicatecheck.utils;
 
 import android.Manifest;
 import android.content.Context;
@@ -7,6 +7,8 @@ import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+
+import com.lihuzi.duplicatecheck.DuplicateCheckApplication;
 
 import java.util.UUID;
 
