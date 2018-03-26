@@ -1,6 +1,8 @@
-package com.lihuzi.duplicatecheck;
+package com.lihuzi.duplicatecheck.application;
 
 import android.app.Application;
+
+import com.lihuzi.duplicatecheck.broadcast.LHZBroadcast;
 
 /**
  * Created by cocav on 2018/3/15.
@@ -15,6 +17,7 @@ public class DuplicateCheckApplication extends Application
     {
         super.onCreate();
         _instance = this;
+        LHZBroadcast.init();
         initDB();
     }
 
@@ -25,6 +28,5 @@ public class DuplicateCheckApplication extends Application
 
     private void initDB()
     {
-        FileDB.initDB();
     }
 }

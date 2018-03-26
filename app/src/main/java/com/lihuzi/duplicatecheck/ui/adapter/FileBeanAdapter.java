@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.lihuzi.duplicatecheck.FileDetailsActivity;
+import com.lihuzi.duplicatecheck.ui.activity.FileDetailsActivity;
 import com.lihuzi.duplicatecheck.R;
 import com.lihuzi.duplicatecheck.model.FileBean;
 

@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.lihuzi.duplicatecheck.ui.activity.FileDetailsActivity">
+    android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/act_file_details_file_name"
+        android:id="@+id/act_file_range_move_file_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"/>
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:text="批量移动"
+        android:textSize="20sp"
+        android:visibility="gone"/>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/act_file_details_file_path_recyclerview"
+        android:id="@+id/act_file_range_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/act_file_details_file_name"
-        android:layout_marginTop="20dp">
+        android:layout_below="@id/act_file_range_move_file_tv">
     </android.support.v7.widget.RecyclerView>
 </RelativeLayout>

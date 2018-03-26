@@ -14,14 +14,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.lihuzi.duplicatecheck.FileBeanSearchingAdapter;
-import com.lihuzi.duplicatecheck.FileDB;
-import com.lihuzi.duplicatecheck.MD5Utils;
 import com.lihuzi.duplicatecheck.R;
-import com.lihuzi.duplicatecheck.SearchingRecyclerAdapter;
-import com.lihuzi.duplicatecheck.ShowActivity;
-import com.lihuzi.duplicatecheck.utils.getDiviceId;
+import com.lihuzi.duplicatecheck.db.FileDB;
 import com.lihuzi.duplicatecheck.model.FileBean;
+import com.lihuzi.duplicatecheck.ui.adapter.FileBeanSearchingAdapter;
+import com.lihuzi.duplicatecheck.utils.MD5Utils;
+import com.lihuzi.duplicatecheck.utils.getDiviceId;
 
 import java.io.File;
 import java.util.concurrent.ExecutorService;
@@ -40,7 +38,6 @@ public class MainActivity extends AppCompatActivity
 
     private TextView _searchingTv;
     private RecyclerView _searchingRecyclerView;
-    private SearchingRecyclerAdapter _adapter;
     private FileBeanSearchingAdapter adapter;
 
 
@@ -59,7 +56,6 @@ public class MainActivity extends AppCompatActivity
         _searchingTv = findViewById(R.id.act_main_searching);
         _searchingRecyclerView = findViewById(R.id.act_main_searching_recyclerview);
         _searchingRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        _adapter = new SearchingRecyclerAdapter();
         adapter = new FileBeanSearchingAdapter();
         _searchingRecyclerView.setAdapter(adapter);
         findViewById(R.id.act_main_start).setOnClickListener(new View.OnClickListener()
@@ -70,12 +66,20 @@ public class MainActivity extends AppCompatActivity
                 startTask();
             }
         });
+        findViewById(R.id.act_main_show_mp3).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                v.getContext().startActivity(new Intent(v.getContext(), FileRangeActivity.class));
+            }
+        });
         findViewById(R.id.act_main_show).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                v.getContext().startActivity(new Intent(v.getContext(), ShowActivity.class));
+                v.getContext().startActivity(new Intent(v.getContext(), DuplicateFilesActivity.class));
             }
         });
         findViewById(R.id.act_main_show_big_files).setOnClickListener(new View.OnClickListener()
@@ -138,7 +142,7 @@ public class MainActivity extends AppCompatActivity
     private void initSDCard()
     {
         initThread();
-        _adapter.clear();
+        adapter.clear();
         _handler.post(searching);
         new Thread(new Runnable()
         {
@@ -153,16 +157,11 @@ public class MainActivity extends AppCompatActivity
                 }
                 try
                 {
-                    int i = 0;
-                    while (i != 2)
+                    while (true)
                     {
                         if (0 == _threadCount.get())
                         {
-                            i++;
-                        }
-                        else
-                        {
-                            i = 0;
+                            break;
                         }
                         Thread.sleep(1000);
                     }
@@ -235,7 +234,7 @@ public class MainActivity extends AppCompatActivity
             fileBean.hash = MD5Utils.fileToMD5(f);
             fileBean.length = f.length();
             _threadCount.decrementAndGet();
-            com.lihuzi.duplicatecheck.db.FileDB.insert(fileBean);
+            fileBean = com.lihuzi.duplicatecheck.db.FileDB.insert(fileBean);
             _handler.post(new NotifyAdapterRunnable(fileBean));
         }
     }

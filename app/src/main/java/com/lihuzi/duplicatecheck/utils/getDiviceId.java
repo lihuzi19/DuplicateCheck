@@ -8,7 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import com.lihuzi.duplicatecheck.DuplicateCheckApplication;
+import com.lihuzi.duplicatecheck.application.DuplicateCheckApplication;
 
 import java.util.UUID;
 

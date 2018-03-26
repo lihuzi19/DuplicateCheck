@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.content.FileProvider;
 
-import com.lihuzi.duplicatecheck.DuplicateCheckApplication;
+import com.lihuzi.duplicatecheck.application.DuplicateCheckApplication;
 
 import java.io.File;
 import java.io.FileInputStream;

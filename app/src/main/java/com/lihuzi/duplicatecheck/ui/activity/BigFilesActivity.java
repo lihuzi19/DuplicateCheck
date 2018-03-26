@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.lihuzi.duplicatecheck.FileAdapter;
 import com.lihuzi.duplicatecheck.R;
 import com.lihuzi.duplicatecheck.ui.adapter.FileBeanAdapter;
 
@@ -20,7 +19,6 @@ public class BigFilesActivity extends AppCompatActivity
 
         RecyclerView recyclerView = findViewById(R.id.act_big_files_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        FileAdapter adapter = new FileAdapter();
         FileBeanAdapter a = new FileBeanAdapter();
         a.addList(com.lihuzi.duplicatecheck.db.FileDB.getBigFileList());
         recyclerView.setAdapter(a);

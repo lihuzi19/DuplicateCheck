@@ -1,9 +1,12 @@
-package com.lihuzi.duplicatecheck;
+package com.lihuzi.duplicatecheck.ui.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
+import com.lihuzi.duplicatecheck.R;
+import com.lihuzi.duplicatecheck.ui.adapter.FileDetailsPathAdapter;
 
 public class FileDetailsActivity extends AppCompatActivity
 {

@@ -2,7 +2,7 @@ package com.lihuzi.duplicatecheck.db;
 
 import android.util.Log;
 
-import com.lihuzi.duplicatecheck.DuplicateCheckApplication;
+import com.lihuzi.duplicatecheck.application.DuplicateCheckApplication;
 import com.lihuzi.duplicatecheck.model.DaoMaster;
 import com.lihuzi.duplicatecheck.model.DaoSession;
 import com.lihuzi.duplicatecheck.model.FileBean;
@@ -34,7 +34,7 @@ public class FileDB
         }
     }
 
-    public static ArrayList<FileBean> getDuplicateList()
+    public static synchronized ArrayList<FileBean> getDuplicateList()
     {
         initDB();
         ArrayList<FileBean> list = new ArrayList<>();
@@ -49,7 +49,23 @@ public class FileDB
         return list;
     }
 
-    public static ArrayList<FileBean> getBigFileList()
+    public static synchronized ArrayList<FileBean> getListWithType(String type)
+    {
+        initDB();
+        ArrayList<FileBean> list = new ArrayList<>();
+        List<FileBean> result = _daoSession.queryBuilder(FileBean.class).//
+                where(FileBeanDao.Properties.Name.like("%" + type)).//
+                orderDesc(FileBeanDao.Properties.Length).//
+                build().//
+                list();
+        if (result != null && result.size() > 0)
+        {
+            list.addAll(result);
+        }
+        return list;
+    }
+
+    public static synchronized ArrayList<FileBean> getBigFileList()
     {
         initDB();
         ArrayList<FileBean> list = new ArrayList<>();
@@ -64,7 +80,7 @@ public class FileDB
         return list;
     }
 
-    public static FileBean getFileBean(String hash)
+    public static synchronized FileBean getFileBean(String hash)
     {
         initDB();
         FileBean fileBean = _daoSession.queryBuilder(FileBean.class).//
@@ -74,7 +90,7 @@ public class FileDB
         return fileBean;
     }
 
-    public static void insert(FileBean fileBean)
+    public static synchronized FileBean insert(FileBean fileBean)
     {
         initDB();
         FileBean file = getFileBean(fileBean.hash);
@@ -84,6 +100,7 @@ public class FileDB
             {
                 fileBean.path = new ArrayList<>();
                 fileBean.path.add(fileBean.localPath);
+                fileBean.duplicateCount++;
                 _daoSession.insert(fileBean);
             }
             catch (Exception e)
@@ -94,13 +111,15 @@ public class FileDB
         else
         {
             file.path.add(fileBean.localPath);
+            file.duplicateCount++;
             _daoSession.update(file);
-
+            fileBean = file;
         }
         Log.v("fileBean insert", fileBean.toString());
+        return fileBean;
     }
 
-    public static void update(FileBean fileBean)
+    public static synchronized void update(FileBean fileBean)
     {
         initDB();
         if (fileBean.path != null && fileBean.path.size() == 0)
@@ -113,13 +132,13 @@ public class FileDB
         }
     }
 
-    public static void delete(FileBean fileBean)
+    public static synchronized void delete(FileBean fileBean)
     {
         initDB();
         _daoSession.delete(fileBean);
     }
 
-    public static void deleteAll()
+    public static synchronized void deleteAll()
     {
         initDB();
         _daoSession.deleteAll(FileBean.class);

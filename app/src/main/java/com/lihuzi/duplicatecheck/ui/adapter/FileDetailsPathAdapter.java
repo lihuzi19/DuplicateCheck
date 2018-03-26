@@ -1,4 +1,4 @@
-package com.lihuzi.duplicatecheck;
+package com.lihuzi.duplicatecheck.ui.adapter;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.lihuzi.duplicatecheck.R;
+import com.lihuzi.duplicatecheck.db.FileDB;
+import com.lihuzi.duplicatecheck.model.FileBean;
 import com.lihuzi.duplicatecheck.utils.LHZFileUtils;
 
 import java.io.File;
@@ -28,23 +31,10 @@ public class FileDetailsPathAdapter extends
 
     private void initPathList()
     {
-        _fileModel = FileDB.getFileModel(_hash);
-        if (_fileModel != null)
-        {
-            _list = _fileModel.path.split(",");
-            if (_list.length == 0)
-            {
-                _list = new String[]{_fileModel.path};
-            }
-        }
-        else
-        {
-            _list = new String[]{};
-        }
+        _FileBean = FileDB.getFileBean(_hash);
     }
 
-    private FileModel _fileModel;
-    private String[] _list;
+    private FileBean _FileBean;
     private String _hash;
 
     @Override
@@ -58,7 +48,7 @@ public class FileDetailsPathAdapter extends
     public void onBindViewHolder(FileDetailsPathViewHolder holder, int position)
     {
         TextView pathTv = holder.itemView.findViewById(R.id.viewholder_file_details_path_tv);
-        String path = _list[position];
+        String path = _FileBean.path.get(position);
         pathTv.setText(path);
         pathTv.setTag(path);
     }
@@ -66,7 +56,7 @@ public class FileDetailsPathAdapter extends
     @Override
     public int getItemCount()
     {
-        return _list.length;
+        return _FileBean.path.size();
     }
 
     class FileDetailsPathViewHolder extends RecyclerView.ViewHolder
@@ -110,20 +100,14 @@ public class FileDetailsPathAdapter extends
                     {
                         f.delete();
                     }
-                    String path_list = _fileModel.path;
-                    if (path_list.contains("," + path))
+                    for (String s : _FileBean.path)
                     {
-                        _fileModel.path = path_list.replace("," + path, "");
+                        if (path.equals(s))
+                        {
+                            _FileBean.path.remove(s);
+                        }
                     }
-                    else if (path_list.contains(path + ","))
-                    {
-                        _fileModel.path = path_list.replace(path + ",", "");
-                    }
-                    else if (path_list.contains(path))
-                    {
-                        _fileModel.path = path_list.replace(path, "");
-                    }
-                    FileDB.update(_fileModel);
+                    FileDB.update(_FileBean);
                     initPathList();
                     notifyDataSetChanged();
                 }

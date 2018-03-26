@@ -1,4 +1,4 @@
-package com.lihuzi.duplicatecheck;
+package com.lihuzi.duplicatecheck.utils;
 
 import java.io.File;
 import java.io.FileInputStream;

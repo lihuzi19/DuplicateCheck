@@ -2,17 +2,17 @@ package com.lihuzi.duplicatecheck.model;
 
 import org.greenrobot.greendao.converter.PropertyConverter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by cocav on 2018/3/22.
  */
 
-public class StringConverter implements PropertyConverter<List<String>, String>
+public class StringConverter implements PropertyConverter<ArrayList<String>, String>
 {
     @Override
-    public List<String> convertToEntityProperty(String databaseValue)
+    public ArrayList<String> convertToEntityProperty(String databaseValue)
     {
         if (databaseValue == null)
         {
@@ -20,13 +20,14 @@ public class StringConverter implements PropertyConverter<List<String>, String>
         }
         else
         {
-            List<String> list = Arrays.asList(databaseValue.split(","));
+            ArrayList<String> list = new ArrayList<>();
+            list.addAll(Arrays.asList(databaseValue.split(",")));
             return list;
         }
     }
 
     @Override
-    public String convertToDatabaseValue(List<String> entityProperty)
+    public String convertToDatabaseValue(ArrayList<String> entityProperty)
     {
         if (entityProperty == null)
         {

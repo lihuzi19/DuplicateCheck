@@ -1,4 +1,4 @@
-package com.lihuzi.duplicatecheck;
+package com.lihuzi.duplicatecheck.ui.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,23 +6,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.lihuzi.duplicatecheck.R;
+import com.lihuzi.duplicatecheck.model.FileBean;
+
 import java.util.ArrayList;
 
 /**
  * Created by cocav on 2018/3/17.
  */
 
-public class SearchingRecyclerAdapter extends
-        RecyclerView.Adapter<SearchingRecyclerAdapter.SearchingViewHolder>
+public class FileBeanSearchingAdapter extends
+        RecyclerView.Adapter<FileBeanSearchingAdapter.SearchingViewHolder>
 {
-    private ArrayList<FileModel> _list;
+    private ArrayList<FileBean> _list;
 
-    public SearchingRecyclerAdapter()
+    public FileBeanSearchingAdapter()
     {
         _list = new ArrayList<>();
     }
 
-    public void add(FileModel model)
+    public void add(FileBean model)
     {
         _list.add(0, model);
         notifyDataSetChanged();
