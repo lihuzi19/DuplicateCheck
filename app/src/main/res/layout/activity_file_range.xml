@@ -6,11 +6,27 @@
 
     <TextView
         android:id="@+id/act_file_range_move_file_tv"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:background="@android:color/darker_gray"
         android:gravity="center"
+        android:padding="5dp"
         android:text="批量移动"
+        android:textSize="20sp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/act_file_range_cancel_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/darker_gray"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="取消"
         android:textSize="20sp"
         android:visibility="gone"/>
 
@@ -18,6 +34,6 @@
         android:id="@+id/act_file_range_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/act_file_range_move_file_tv">
+        android:layout_above="@id/act_file_range_move_file_tv">
     </android.support.v7.widget.RecyclerView>
 </RelativeLayout>

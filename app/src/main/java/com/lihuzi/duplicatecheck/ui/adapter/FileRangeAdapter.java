@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.lihuzi.duplicatecheck.R;
@@ -40,7 +41,19 @@ public class FileRangeAdapter extends RecyclerView.Adapter<FileRangeAdapter.File
 
     private void choose(FileBean fileBean)
     {
-        _chooseMap = new HashMap<>();
+        if (_chooseMap == null)
+        {
+            _chooseMap = new HashMap<>();
+        }
+        if (_chooseMap.containsKey(fileBean.hash))
+        {
+            _chooseMap.remove(fileBean.hash);
+        }
+        else
+        {
+            _chooseMap.put(fileBean.hash, fileBean);
+        }
+        notifyDataSetChanged();
     }
 
     public ArrayList<FileBean> getChooseList()
@@ -57,6 +70,12 @@ public class FileRangeAdapter extends RecyclerView.Adapter<FileRangeAdapter.File
         return list;
     }
 
+    public void chooseCancel()
+    {
+        _chooseMap = null;
+        notifyDataSetChanged();
+    }
+
     @Override
     public FileRangeViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
@@ -68,18 +87,15 @@ public class FileRangeAdapter extends RecyclerView.Adapter<FileRangeAdapter.File
     public void onBindViewHolder(FileRangeViewHolder holder, int position)
     {
         FileBean fileBean = _list.get(position);
-        TextView _content = holder.itemView.findViewById(R.id.viewholder_file_range_content_tv);
-        _content.setText(fileBean.toString());
-        CheckBox cb = holder.itemView.findViewById(R.id.viewholder_file_range_cb);
+        holder._contentTv.setText(fileBean.toString());
         if (_chooseMap != null)
         {
-            cb.setVisibility(View.VISIBLE);
-            cb.setChecked(_chooseMap.containsKey(fileBean.hash));
+            holder._chooseCb.setVisibility(View.VISIBLE);
+            holder._chooseCb.setChecked(_chooseMap.containsKey(fileBean.hash));
         }
         else
         {
-            cb.setVisibility(View.GONE);
-
+            holder._chooseCb.setVisibility(View.GONE);
         }
     }
 
@@ -92,10 +108,14 @@ public class FileRangeAdapter extends RecyclerView.Adapter<FileRangeAdapter.File
 
     class FileRangeViewHolder extends RecyclerView.ViewHolder
     {
+        public CheckBox _chooseCb;
+        public TextView _contentTv;
 
         public FileRangeViewHolder(View itemView)
         {
             super(itemView);
+            _contentTv = itemView.findViewById(R.id.viewholder_file_range_content_tv);
+            _chooseCb = itemView.findViewById(R.id.viewholder_file_range_cb);
             itemView.setOnLongClickListener(new View.OnLongClickListener()
             {
                 @Override
@@ -107,11 +127,23 @@ public class FileRangeAdapter extends RecyclerView.Adapter<FileRangeAdapter.File
                         @Override
                         public void onClick(DialogInterface dialog, int which)
                         {
+                            choose(_list.get(getAdapterPosition()));
                             LHZBroadcast.sendBroadcast(LHZBroadcastAction.ACTION_RANGE_CHOOSE, null);
                         }
                     });
                     builder.show();
                     return true;
+                }
+            });
+            _chooseCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+            {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+                {
+                    if (buttonView.isPressed())
+                    {
+                        choose(_list.get(getAdapterPosition()));
+                    }
                 }
             });
         }

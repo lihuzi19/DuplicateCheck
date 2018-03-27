@@ -22,7 +22,9 @@ public class FileRangeActivity extends AppCompatActivity
 {
     private RecyclerView _recyclerView;
     private TextView _moveFileTv;
+    private TextView _cancelTv;
 
+    private final int REQUEST_CHOOSE_FOLDER = 100;
     private String _fileType;
 
     private FileRangeAdapter _adapter;
@@ -60,7 +62,20 @@ public class FileRangeActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                ArrayList<FileBean> list = _adapter.getChooseList();
+                Intent i = new Intent(FileRangeActivity.this, ChooseFolderActivity.class);
+                FileRangeActivity.this.startActivityForResult(i, REQUEST_CHOOSE_FOLDER);
+            }
+        });
+
+        _cancelTv = findViewById(R.id.act_file_range_cancel_tv);
+        _cancelTv.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                _moveFileTv.setVisibility(View.GONE);
+                _cancelTv.setVisibility(View.GONE);
+                _adapter.chooseCancel();
             }
         });
     }
@@ -73,6 +88,7 @@ public class FileRangeActivity extends AppCompatActivity
             public void onReceive(Intent i)
             {
                 _moveFileTv.setVisibility(View.VISIBLE);
+                _cancelTv.setVisibility(View.VISIBLE);
             }
         };
         setAdapter();
@@ -102,5 +118,20 @@ public class FileRangeActivity extends AppCompatActivity
                 });
             }
         }).start();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (resultCode == RESULT_OK)
+        {
+            switch (requestCode)
+            {
+                case REQUEST_CHOOSE_FOLDER:
+                {
+                }
+                break;
+            }
+        }
     }
 }

@@ -37,6 +37,8 @@
         <activity android:name=".ui.activity.DuplicateFilesActivity"/>
         <activity android:name=".ui.activity.FileRangeActivity">
         </activity>
+        <activity android:name=".ui.activity.ChooseFolderActivity">
+        </activity>
     </application>
 
 </manifest>

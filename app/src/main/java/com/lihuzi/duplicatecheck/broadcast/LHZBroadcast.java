@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class LHZBroadcast
 {
-    private static final String LOCAL_BROADCAST_ACTION = "com.lihuzi.duplicateapplicadtion";
+    private static final String LOCAL_BROADCAST_ACTION = "com.lihuzi.duplicateapplicadtion.broadcast";
 
     private static final String ACTION_NUMBER = "action_number";
 
@@ -37,6 +37,7 @@ public class LHZBroadcast
         if (queue == null)
         {
             queue = new ConcurrentLinkedQueue<>();
+            _listeners.put(action, queue);
         }
         queue.add(listener);
     }
@@ -62,6 +63,7 @@ public class LHZBroadcast
             i = new Intent();
         }
         i.putExtra(ACTION_NUMBER, action);
+        i.setAction(LOCAL_BROADCAST_ACTION);
         LocalBroadcastManager.getInstance(DuplicateCheckApplication.getInstance()).sendBroadcast(i);
     }
 
@@ -87,7 +89,6 @@ public class LHZBroadcast
 
     private static class DuplicateCheckBroadcastReceiver extends BroadcastReceiver
     {
-
         @Override
         public void onReceive(Context context, Intent intent)
         {
