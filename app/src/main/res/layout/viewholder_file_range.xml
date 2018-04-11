@@ -4,6 +4,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingBottom="2dp"
+                android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingStart="5dp"
                 android:paddingTop="2dp">
 
     <CheckBox
@@ -16,14 +20,49 @@
         android:visibility="gone"
         tools:visibility="visible"/>
 
-    <TextView
-        android:id="@+id/viewholder_file_range_content_tv"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@id/viewholder_file_range_cb"
-        android:layout_toStartOf="@id/viewholder_file_range_cb"
-        android:padding="5dp"/>
+        android:layout_toStartOf="@id/viewholder_file_range_cb">
+
+        <TextView
+            android:id="@+id/viewholder_file_range_name_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:textColor="@android:color/background_dark"
+            android:textSize="18sp"
+            tools:text="男孩.flac"/>
+
+        <TextView
+            android:id="@+id/viewholder_file_range_content_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/viewholder_file_range_name_tv"
+            android:padding="2dp"
+            android:textSize="14sp"
+            tools:text="path"/>
+
+        <TextView
+            android:id="@+id/viewholder_file_range_size_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/viewholder_file_range_content_tv"
+            android:padding="2dp"
+            android:textSize="14sp"
+            tools:text="12m"/>
+
+        <TextView
+            android:id="@+id/viewholder_file_range_duplicate_count_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/viewholder_file_range_size_tv"
+            android:padding="2dp"
+            android:textSize="14sp"
+            tools:text="1"/>
+    </RelativeLayout>
 
 
 </RelativeLayout>

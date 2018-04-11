@@ -90,6 +90,14 @@ public class MainActivity extends AppCompatActivity
                 v.getContext().startActivity(new Intent(v.getContext(), BigFilesActivity.class));
             }
         });
+        findViewById(R.id.act_main_search_custom).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                v.getContext().startActivity(new Intent(v.getContext(), CustomSearchActivity.class));
+            }
+        });
     }
 
     private void startTask()

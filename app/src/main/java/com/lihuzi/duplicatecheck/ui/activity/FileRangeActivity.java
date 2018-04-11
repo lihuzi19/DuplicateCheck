@@ -6,7 +6,6 @@ import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -184,6 +183,19 @@ public class FileRangeActivity extends AppCompatActivity
                 }
                 break;
             }
+        }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        if (_adapter.chooseCancel())
+        {
+            _cancelTv.performClick();
+        }
+        else
+        {
+            super.onBackPressed();
         }
     }
 }

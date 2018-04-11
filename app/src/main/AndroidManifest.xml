@@ -39,6 +39,8 @@
         </activity>
         <activity android:name=".ui.activity.ChooseFolderActivity">
         </activity>
+        <activity android:name=".ui.activity.CustomSearchActivity">
+        </activity>
     </application>
 
 </manifest>

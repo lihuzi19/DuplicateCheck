@@ -2,6 +2,7 @@ package com.lihuzi.duplicatecheck.ui.adapter;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,8 @@ import com.lihuzi.duplicatecheck.R;
 import com.lihuzi.duplicatecheck.broadcast.LHZBroadcast;
 import com.lihuzi.duplicatecheck.broadcast.LHZBroadcastAction;
 import com.lihuzi.duplicatecheck.model.FileBean;
+import com.lihuzi.duplicatecheck.ui.activity.FileDetailsActivity;
+import com.lihuzi.duplicatecheck.utils.FileLengthUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,10 +73,18 @@ public class FileRangeAdapter extends RecyclerView.Adapter<FileRangeAdapter.File
         return list;
     }
 
-    public void chooseCancel()
+    public boolean chooseCancel()
     {
-        _chooseMap = null;
-        notifyDataSetChanged();
+        if (_chooseMap != null)
+        {
+            _chooseMap = null;
+            notifyDataSetChanged();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     @Override
@@ -86,17 +97,7 @@ public class FileRangeAdapter extends RecyclerView.Adapter<FileRangeAdapter.File
     @Override
     public void onBindViewHolder(FileRangeViewHolder holder, int position)
     {
-        FileBean fileBean = _list.get(position);
-        holder._contentTv.setText(fileBean.toString());
-        if (_chooseMap != null)
-        {
-            holder._chooseCb.setVisibility(View.VISIBLE);
-            holder._chooseCb.setChecked(_chooseMap.containsKey(fileBean.hash));
-        }
-        else
-        {
-            holder._chooseCb.setVisibility(View.GONE);
-        }
+        holder.setFileBean();
     }
 
 
@@ -109,13 +110,37 @@ public class FileRangeAdapter extends RecyclerView.Adapter<FileRangeAdapter.File
     class FileRangeViewHolder extends RecyclerView.ViewHolder
     {
         public CheckBox _chooseCb;
-        public TextView _contentTv;
+        public TextView _nameTv;
+        public TextView _pathTv;
+        public TextView _sizeTv;
+        public TextView _duplicateCountTv;
 
         public FileRangeViewHolder(View itemView)
         {
             super(itemView);
-            _contentTv = itemView.findViewById(R.id.viewholder_file_range_content_tv);
+            _nameTv = itemView.findViewById(R.id.viewholder_file_range_name_tv);
+            _pathTv = itemView.findViewById(R.id.viewholder_file_range_content_tv);
+            _sizeTv = itemView.findViewById(R.id.viewholder_file_range_size_tv);
+            _duplicateCountTv = itemView.findViewById(R.id.viewholder_file_range_duplicate_count_tv);
             _chooseCb = itemView.findViewById(R.id.viewholder_file_range_cb);
+
+            itemView.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    if (_chooseMap != null)
+                    {
+                        choose(_list.get(getAdapterPosition()));
+                    }
+                    else
+                    {
+                        Intent i = new Intent(v.getContext(), FileDetailsActivity.class);
+                        i.putExtra("hash", _list.get(getAdapterPosition()).hash);
+                        v.getContext().startActivity(i);
+                    }
+                }
+            });
             itemView.setOnLongClickListener(new View.OnLongClickListener()
             {
                 @Override
@@ -146,6 +171,24 @@ public class FileRangeAdapter extends RecyclerView.Adapter<FileRangeAdapter.File
                     }
                 }
             });
+        }
+
+        public void setFileBean()
+        {
+            FileBean fileBean = _list.get(getAdapterPosition());
+            _nameTv.setText(fileBean.getName());
+            _pathTv.setText("文件路径: " + fileBean.getPath().toString());
+            _sizeTv.setText("文件大小: " + FileLengthUtils.getLengthStr(fileBean.getLength()));
+            _duplicateCountTv.setText("文件数量: " + fileBean.getDuplicateCount());
+            if (_chooseMap != null)
+            {
+                _chooseCb.setVisibility(View.VISIBLE);
+                _chooseCb.setChecked(_chooseMap.containsKey(fileBean.hash));
+            }
+            else
+            {
+                _chooseCb.setVisibility(View.GONE);
+            }
         }
     }
 }
