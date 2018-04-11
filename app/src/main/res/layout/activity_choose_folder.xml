@@ -6,9 +6,21 @@
     android:layout_height="match_parent"
     tools:context="com.lihuzi.duplicatecheck.ui.activity.ChooseFolderActivity">
 
+    <TextView
+        android:id="@+id/act_choose_folder_choose_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/darker_gray"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="选中"
+        android:textSize="20sp"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/act_choose_folder_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@id/act_choose_folder_choose_tv">
     </android.support.v7.widget.RecyclerView>
 </RelativeLayout>

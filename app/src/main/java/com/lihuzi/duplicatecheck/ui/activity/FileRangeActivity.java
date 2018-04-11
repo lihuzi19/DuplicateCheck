@@ -2,9 +2,11 @@ package com.lihuzi.duplicatecheck.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,7 +17,9 @@ import com.lihuzi.duplicatecheck.broadcast.LHZBroadcastListener;
 import com.lihuzi.duplicatecheck.db.FileDB;
 import com.lihuzi.duplicatecheck.model.FileBean;
 import com.lihuzi.duplicatecheck.ui.adapter.FileRangeAdapter;
+import com.lihuzi.duplicatecheck.utils.LHZFileUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class FileRangeActivity extends AppCompatActivity
@@ -129,6 +133,54 @@ public class FileRangeActivity extends AppCompatActivity
             {
                 case REQUEST_CHOOSE_FOLDER:
                 {
+                    if (data.hasExtra("path"))
+                    {
+                        String path = data.getStringExtra("path");
+                        final File f = new File(path);
+                        if (f.exists())
+                        {
+                            final ArrayList<FileBean> list = _adapter.getChooseList();
+                            if (list.size() > 0)
+                            {
+                                new Thread(new Runnable()
+                                {
+                                    @Override
+                                    public void run()
+                                    {
+                                        try
+                                        {
+                                            for (int i = 0; i < list.size(); i++)
+                                            {
+                                                FileBean fileBean = list.get(i);
+                                                File source = new File(fileBean.path.get(0));
+                                                File dest = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/test/", fileBean.getName());
+                                                File testFolder = dest.getParentFile();
+                                                if (!testFolder.exists())
+                                                {
+                                                    testFolder.mkdir();
+                                                }
+                                                dest.createNewFile();
+                                                LHZFileUtils.copyFileUsingFileChannels(source, dest);
+                                                for (String path : fileBean.path)
+                                                {
+                                                    File p = new File(path);
+                                                    if (p.exists())
+                                                    {
+                                                        p.delete();
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }).start();
+                            }
+
+                        }
+                    }
                 }
                 break;
             }

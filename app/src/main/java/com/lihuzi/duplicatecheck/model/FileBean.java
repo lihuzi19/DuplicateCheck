@@ -6,12 +6,11 @@ import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.Property;
 import org.greenrobot.greendao.annotation.Transient;
-import org.greenrobot.greendao.annotation.Unique;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by cocav on 2018/3/22.
@@ -23,7 +22,7 @@ public class FileBean
     public Long _id;
     @Property
     public String name;
-    @Unique
+    @Index(unique = true)
     public String hash;
     @Convert(columnType = String.class, converter = StringConverter.class)
     public ArrayList<String> path;
@@ -45,7 +44,8 @@ public class FileBean
 
 
     @Generated(hash = 1426334450)
-    public FileBean(Long _id, String name, String hash, ArrayList<String> path, long length, int duplicateCount) {
+    public FileBean(Long _id, String name, String hash, ArrayList<String> path, long length, int duplicateCount)
+    {
         this._id = _id;
         this.name = name;
         this.hash = hash;
@@ -56,7 +56,8 @@ public class FileBean
 
 
     @Generated(hash = 1910776192)
-    public FileBean() {
+    public FileBean()
+    {
     }
 
 
@@ -67,62 +68,74 @@ public class FileBean
     }
 
 
-    public Long get_id() {
+    public Long get_id()
+    {
         return this._id;
     }
 
 
-    public void set_id(Long _id) {
+    public void set_id(Long _id)
+    {
         this._id = _id;
     }
 
 
-    public String getName() {
+    public String getName()
+    {
         return this.name;
     }
 
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
 
-    public String getHash() {
+    public String getHash()
+    {
         return this.hash;
     }
 
 
-    public void setHash(String hash) {
+    public void setHash(String hash)
+    {
         this.hash = hash;
     }
 
 
-    public ArrayList<String> getPath() {
+    public ArrayList<String> getPath()
+    {
         return this.path;
     }
 
 
-    public void setPath(ArrayList<String> path) {
+    public void setPath(ArrayList<String> path)
+    {
         this.path = path;
     }
 
 
-    public long getLength() {
+    public long getLength()
+    {
         return this.length;
     }
 
 
-    public void setLength(long length) {
+    public void setLength(long length)
+    {
         this.length = length;
     }
 
 
-    public int getDuplicateCount() {
+    public int getDuplicateCount()
+    {
         return this.duplicateCount;
     }
 
 
-    public void setDuplicateCount(int duplicateCount) {
+    public void setDuplicateCount(int duplicateCount)
+    {
         this.duplicateCount = duplicateCount;
     }
 

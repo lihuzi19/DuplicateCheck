@@ -236,6 +236,7 @@ public class MainActivity extends AppCompatActivity
             _threadCount.decrementAndGet();
             fileBean = com.lihuzi.duplicatecheck.db.FileDB.insert(fileBean);
             _handler.post(new NotifyAdapterRunnable(fileBean));
+            System.err.println("thread name:" + Thread.currentThread().getName());
         }
     }
 

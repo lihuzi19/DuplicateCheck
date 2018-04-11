@@ -27,8 +27,10 @@ public class FileDB
             {
                 if (_daoSession == null)
                 {
-                    DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(DuplicateCheckApplication.getInstance(), "fileBean.db", null);
+                    //                    Log.v("FileDB", "_daoSession init start" + System.currentTimeMillis());
+                    DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(DuplicateCheckApplication.getInstance(), "fileBean-db");
                     _daoSession = new DaoMaster(helper.getWritableDb()).newSession();
+                    //                    Log.v("FileDB", "_daoSession init end " + System.currentTimeMillis());
                 }
             }
         }
