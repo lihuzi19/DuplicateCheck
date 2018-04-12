@@ -1,6 +1,6 @@
 package com.lihuzi.duplicatecheck.utils;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -21,7 +21,7 @@ import java.nio.channels.FileChannel;
 
 public class LHZFileUtils
 {
-    public static void openFile(Activity activity, File file)
+    public static void openFile(Context activity, File file)
     {
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.addCategory(Intent.CATEGORY_DEFAULT);
@@ -29,7 +29,7 @@ public class LHZFileUtils
         i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         Uri uri = getUriFromFile(file);
         i.setDataAndType(uri, getMimeType(file.getName()));
-         activity.startActivity(i);
+        activity.startActivity(i);
     }
 
     public static void copyFileUsingFileChannels(File source, File dest)

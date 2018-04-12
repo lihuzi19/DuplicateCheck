@@ -23,23 +23,37 @@
                 android:resource="@xml/file_path"/>
         </provider>
 
-        <activity android:name=".ui.activity.MainActivity">
+        <activity
+            android:name=".ui.activity.MainActivity"
+            android:label="首页">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.FileDetailsActivity">
+        <activity
+            android:name=".ui.activity.FileDetailsActivity"
+            android:label="文件地址">
         </activity>
-        <activity android:name=".ui.activity.BigFilesActivity">
+        <activity
+            android:name=".ui.activity.BigFilesActivity"
+            android:label="大文件">
         </activity>
-        <activity android:name=".ui.activity.DuplicateFilesActivity"/>
-        <activity android:name=".ui.activity.FileRangeActivity">
+        <activity
+            android:name=".ui.activity.DuplicateFilesActivity"
+            android:label="重复文件"/>
+        <activity
+            android:name=".ui.activity.MediaActivity"
+            android:label="音频文件">
         </activity>
-        <activity android:name=".ui.activity.ChooseFolderActivity">
+        <activity
+            android:name=".ui.activity.ChooseFolderActivity"
+            android:label="选择文件位置">
         </activity>
-        <activity android:name=".ui.activity.CustomSearchActivity">
+        <activity
+            android:name=".ui.activity.CustomSearchActivity"
+            android:label="自定义搜索">
         </activity>
     </application>
 

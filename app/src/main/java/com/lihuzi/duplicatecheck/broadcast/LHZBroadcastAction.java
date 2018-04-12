@@ -6,5 +6,5 @@ package com.lihuzi.duplicatecheck.broadcast;
 
 public class LHZBroadcastAction
 {
-    public static final int ACTION_RANGE_CHOOSE = 0;
+    public static final int ACTION_RANGE_CHOOSE = 1;
 }

@@ -85,6 +85,7 @@ public class ChooseFolderAdapter extends
                 {
                     String path = (String) v.getTag();
                     _nextCallback.callback(path);
+                    _choosePath = null;
                 }
             });
             _cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()

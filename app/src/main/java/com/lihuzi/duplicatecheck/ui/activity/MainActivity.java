@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                v.getContext().startActivity(new Intent(v.getContext(), FileRangeActivity.class));
+                v.getContext().startActivity(new Intent(v.getContext(), MediaActivity.class));
             }
         });
         findViewById(R.id.act_main_show).setOnClickListener(new View.OnClickListener()

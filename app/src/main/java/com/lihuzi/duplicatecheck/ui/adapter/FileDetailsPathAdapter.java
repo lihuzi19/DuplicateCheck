@@ -1,6 +1,5 @@
 package com.lihuzi.duplicatecheck.ui.adapter;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -79,7 +78,7 @@ public class FileDetailsPathAdapter extends
             File f = new File(path);
             if (f.exists())
             {
-                LHZFileUtils.openFile(((Activity) v.getContext()), f);
+                LHZFileUtils.openFile(v.getContext(), f);
             }
         }
     };

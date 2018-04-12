@@ -22,6 +22,7 @@ public class ChooseFolderActivity extends AppCompatActivity
     private RecyclerView _recyclerView;
     private ChooseFolderAdapter _adapter;
     private File _parentFolder;
+    private String sdcardPath;
     private LHZCallback<String> _callback;
 
     @Override
@@ -42,6 +43,7 @@ public class ChooseFolderActivity extends AppCompatActivity
             }
         };
         initView();
+        sdcardPath = Environment.getExternalStorageDirectory().getAbsolutePath();
         findChild(Environment.getExternalStorageDirectory());
     }
 
@@ -89,5 +91,22 @@ public class ChooseFolderActivity extends AppCompatActivity
             }
         }
         _adapter.setData(paths);
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        if (!_parentFolder.getAbsolutePath().equals(sdcardPath))
+        {
+            File f = _parentFolder;
+            if (f.exists())
+            {
+                findChild(f.getParentFile());
+            }
+        }
+        else
+        {
+            super.onBackPressed();
+        }
     }
 }

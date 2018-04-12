@@ -1,8 +1,9 @@
 package com.lihuzi.duplicatecheck.ui.activity;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,35 +22,80 @@ import com.lihuzi.duplicatecheck.utils.LHZFileUtils;
 import java.io.File;
 import java.util.ArrayList;
 
-public class FileRangeActivity extends AppCompatActivity
+public abstract class ModelActivity extends AppCompatActivity
 {
+    public abstract void initData();
+
+    //    private void initDataDemo()
+    //    {
+    //        System.err.println("ModelActivity initData");
+    //        new Thread(new Runnable()
+    //        {
+    //            @Override
+    //            public void run()
+    //            {
+    //                String[] typeArray = new String[]{"mp3", "ape", "flac", "aac", "wav", "ogg", "amr", "silk"};
+    //                final ArrayList<FileBean> list = new ArrayList<>();
+    //                for (int i = 0; i < typeArray.length; i++)
+    //                {
+    //                    String type = typeArray[i];
+    //                    list.addAll(FileDB.getListWithType(type));
+    //                }
+    //                runOnUiThread(new Runnable()
+    //                {
+    //                    @Override
+    //                    public void run()
+    //                    {
+    //                        _adapter.setData(list);
+    //                    }
+    //                });
+    //            }
+    //        }).start();
+    //    }
+
     private RecyclerView _recyclerView;
     private TextView _moveFileTv;
     private TextView _cancelTv;
+    private ProgressDialog _progressDialog;
 
     private final int REQUEST_CHOOSE_FOLDER = 100;
-    private String _fileType;
+    private ArrayList<FileBean> _list;
 
     private FileRangeAdapter _adapter;
-    private LHZBroadcastListener chooseListener;
+
+    private LHZBroadcastListener chooseListener = new LHZBroadcastListener()
+    {
+        @Override
+        public void onReceive(Intent i)
+        {
+            _moveFileTv.setVisibility(View.VISIBLE);
+            _cancelTv.setVisibility(View.VISIBLE);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_file_range);
-        //        _fileType = getIntent().getStringExtra("mp3");
-        _fileType = "mp3";
-        initView();
-        initData();
+        setContentView(R.layout.activity_model);
+        init();
         LHZBroadcast.registerBroadcast(LHZBroadcastAction.ACTION_RANGE_CHOOSE, chooseListener);
     }
 
-    @Override
-    protected void onDestroy()
+    public void setDataToAdapter(ArrayList<FileBean> list)
     {
-        LHZBroadcast.unRegisterBroadcast(LHZBroadcastAction.ACTION_RANGE_CHOOSE, chooseListener);
-        super.onDestroy();
+        _list = list;
+        if (_adapter != null)
+        {
+            _adapter.setData(list);
+        }
+    }
+
+    private void init()
+    {
+        _progressDialog = new ProgressDialog(this);
+        initView();
+        initData();
     }
 
     private void initView()
@@ -58,6 +104,10 @@ public class FileRangeActivity extends AppCompatActivity
         _recyclerView.setLayoutManager(new LinearLayoutManager(this));
         _adapter = new FileRangeAdapter();
         _recyclerView.setAdapter(_adapter);
+        if (_list != null && _list.size() > 0)
+        {
+            _adapter.setData(_list);
+        }
 
         _moveFileTv = findViewById(R.id.act_file_range_move_file_tv);
         _moveFileTv.setOnClickListener(new View.OnClickListener()
@@ -65,8 +115,8 @@ public class FileRangeActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                Intent i = new Intent(FileRangeActivity.this, ChooseFolderActivity.class);
-                FileRangeActivity.this.startActivityForResult(i, REQUEST_CHOOSE_FOLDER);
+                Intent i = new Intent(v.getContext(), ChooseFolderActivity.class);
+                startActivityForResult(i, REQUEST_CHOOSE_FOLDER);
             }
         });
 
@@ -83,50 +133,10 @@ public class FileRangeActivity extends AppCompatActivity
         });
     }
 
-    private void initData()
-    {
-        chooseListener = new LHZBroadcastListener()
-        {
-            @Override
-            public void onReceive(Intent i)
-            {
-                _moveFileTv.setVisibility(View.VISIBLE);
-                _cancelTv.setVisibility(View.VISIBLE);
-            }
-        };
-        setAdapter();
-    }
-
-    private void setAdapter()
-    {
-        new Thread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                String[] typeArray = new String[]{"mp3", "ape", "flac", "aac", "wav", "ogg", "amr", "silk"};
-                final ArrayList<FileBean> list = new ArrayList<>();
-                for (int i = 0; i < typeArray.length; i++)
-                {
-                    String type = typeArray[i];
-                    list.addAll(FileDB.getListWithType(type));
-                }
-                _recyclerView.post(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        _adapter.setData(list);
-                    }
-                });
-            }
-        }).start();
-    }
-
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        if (resultCode == RESULT_OK)
+        if (resultCode == Activity.RESULT_OK)
         {
             switch (requestCode)
             {
@@ -141,6 +151,7 @@ public class FileRangeActivity extends AppCompatActivity
                             final ArrayList<FileBean> list = _adapter.getChooseList();
                             if (list.size() > 0)
                             {
+                                _progressDialog.show();
                                 new Thread(new Runnable()
                                 {
                                     @Override
@@ -152,7 +163,7 @@ public class FileRangeActivity extends AppCompatActivity
                                             {
                                                 FileBean fileBean = list.get(i);
                                                 File source = new File(fileBean.path.get(0));
-                                                File dest = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/test/", fileBean.getName());
+                                                File dest = new File(f, fileBean.getName());
                                                 File testFolder = dest.getParentFile();
                                                 if (!testFolder.exists())
                                                 {
@@ -168,7 +179,20 @@ public class FileRangeActivity extends AppCompatActivity
                                                         p.delete();
                                                     }
                                                 }
+                                                fileBean.path.clear();
+                                                fileBean.path.add(dest.getAbsolutePath());
+                                                FileDB.update(fileBean);
                                             }
+                                            _recyclerView.post(new Runnable()
+                                            {
+                                                @Override
+                                                public void run()
+                                                {
+                                                    _cancelTv.performClick();
+                                                    _progressDialog.dismiss();
+                                                    initData();
+                                                }
+                                            });
                                         }
                                         catch (Exception e)
                                         {
@@ -189,13 +213,18 @@ public class FileRangeActivity extends AppCompatActivity
     @Override
     public void onBackPressed()
     {
-        if (_adapter.chooseCancel())
-        {
-            _cancelTv.performClick();
-        }
-        else
+        if (!_adapter.chooseCancel())
         {
             super.onBackPressed();
         }
     }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        LHZBroadcast.unRegisterBroadcast(LHZBroadcastAction.ACTION_RANGE_CHOOSE, chooseListener);
+    }
+
+
 }
